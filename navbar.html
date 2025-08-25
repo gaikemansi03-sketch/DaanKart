@@ -1,0 +1,35 @@
+<header>
+  <h1><i class="fa-solid fa-hand-holding-heart"></i> DaanKart</h1>
+  <nav>
+    <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
+    <a href="donate.html"><i class="fa-solid fa-box"></i> Donate</a>
+    <a href="request.html"><i class="fa-solid fa-hand-holding-heart"></i> Request</a>
+    <a href="my_donations.html"><i class="fa-solid fa-gift"></i> My Donations</a>
+    <a href="my_requests.html"><i class="fa-solid fa-list"></i> My Requests</a>
+    <a href="dashboard.html"><i class="fa-solid fa-gauge-high"></i> Admin</a>
+    
+    <!-- Auth Links -->
+    <div id="auth-links">
+      <a href="login.html">Login</a>
+      <a href="register.html">Register</a>
+    </div>
+
+    <!-- User Dropdown -->
+    <div id="user-menu" style="display:none;">
+      <span id="username"></span> ▼
+      <div id="dropdown" class="dropdown">
+        <a href="my-donations.html">My Donations</a>
+        <a href="my-requests.html">My Requests</a>
+        <a href="#" id="logoutBtn">Logout</a>
+      </div>
+    </div>
+
+    <!-- Logout Link (for non-dropdown case) -->
+    <a href="#" id="logout-link" style="display:none;">
+      <i class="fa-solid fa-right-from-bracket"></i> Logout
+    </a>
+
+    <!-- 🌙 Dark Mode Toggle -->
+     <button id="darkModeToggle" class="dark-toggle" title="Toggle Dark Mode">🌙</button>
+  </nav>
+</header>

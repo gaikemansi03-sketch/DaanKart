@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard - DaanKart</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+
+<div id="navbar"></div>
+
+<section class="section" id="dashboard">
+  <h2><i class="fa-solid fa-chart-line"></i> Admin Dashboard</h2>
+
+<button id="exportDonations" class="btn">Export Donations CSV</button>
+<button id="exportRequests" class="btn">Export Requests CSV</button>
+
+  <!-- Donations Table -->
+<h3><i class="fa-solid fa-box-archive"></i> All Donations</h3>
+<input type="text" id="donationSearch" placeholder="Search donations...">
+<select id="donationFilter">
+  <option value="">All Categories</option>
+  <option value="Clothes">Clothes</option>
+  <option value="Books">Books</option>
+</select>
+
+<table id="dashboard-donations">
+  <thead>
+    <tr>
+      <th>Item</th>
+      <th>Category</th>
+      <th>Status</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+
+<!-- Requests Table -->
+<h3><i class="fa-solid fa-hand-holding-heart"></i> All Requests</h3>
+<input type="text" id="requestSearch" placeholder="Search requests...">
+<select id="requestFilter">
+  <option value="">All Categories</option>
+  <option value="Clothes">Clothes</option>
+  <option value="Books">Books</option>
+</select>
+
+<table id="dashboard-requests">
+  <thead>
+    <tr>
+      <th>Item</th>
+      <th>Category</th>
+      <th>Status</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+
+<!-- 📊 Analytics Section -->
+<h3><i class="fa-solid fa-chart-pie"></i> Donations Analytics</h3>
+<canvas id="donationChart" width="400" height="200"></canvas>
+
+<h3><i class="fa-solid fa-chart-bar"></i> Requests Analytics</h3>
+<canvas id="requestChart" width="400" height="200"></canvas>
+
+</section>
+
+<footer>
+  <p>&copy; 2025 DaanKart | Designed for Social Impact</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

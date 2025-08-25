@@ -1,0 +1,363 @@
+/* Smooth transition for dark mode toggle */
+body, header, footer, .section, table, form {
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+/* Import Google Font */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+/* General Reset */
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: "Poppins", sans-serif; }
+
+body { background: #f4f7fa; color: #333; line-height: 1.6; }
+
+/* Header */
+/* ===== NAVBAR ===== */
+header {
+  background: linear-gradient(90deg, #0077b6, #0096c7);
+  color: white;
+  padding: 15px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+header h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+nav a:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffd60a;
+}
+
+nav a.active {
+  background: rgba(255,255,255,0.3);
+  border-radius: 4px;
+  color: #ffd60a;
+}
+
+#user-menu {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+#user-menu span {
+  font-weight: 600;
+  color: white;
+  padding: 5px 10px;
+}
+
+.dropdown {
+  display: none;
+  position: absolute;
+  background: white;
+  color: #333;
+  min-width: 160px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  border-radius: 6px;
+  z-index: 1000;
+}
+
+.dropdown a {
+  display: block;
+  padding: 10px;
+  text-decoration: none;
+  color: #333;
+}
+
+.dropdown a:hover {
+  background: #f1f1f1;
+}
+
+
+
+/* Logout button special */
+#logout-link {
+  background: #ef233c;
+  font-weight: bold;
+}
+
+#logout-link:hover {
+  background: #d90429;
+  color: white;
+}
+
+/* Hero */
+.hero {
+  background: url('https://images.unsplash.com/photo-1509099836639-18ba1795216d?auto=format&fit=crop&w=1350&q=80') no-repeat center center/cover;
+  height: 85vh; color: white; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 20px; position: relative;
+}
+.hero::after { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); }
+.hero h1, .hero p, .cta-buttons { position: relative; z-index: 2; }
+.hero h1 { font-size: 3rem; margin-bottom: 20px; font-weight: 700; }
+.hero p { font-size: 1.3rem; margin-bottom: 30px; max-width: 700px; }
+
+/* Buttons */
+.btn, input[type="submit"] {
+  display: inline-block; padding: 12px 22px;
+  background: linear-gradient(90deg, #0077b6, #0096c7);
+  color: white; border: none; border-radius: 50px;
+  cursor: pointer; text-decoration: none;
+  font-weight: 600; transition: 0.3s;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+.btn:hover, input[type="submit"]:hover {
+  background: linear-gradient(90deg, #023e8a, #0077b6);
+  transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0,0,0,0.25);
+}
+
+/* Sections */
+.section { padding: 60px 20px; text-align: center; }
+.section h2 { font-size: 2rem; margin-bottom: 15px; color: #0077b6; font-weight: 700; }
+.steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 25px; margin-top: 30px; }
+.step { background: #fff; padding: 25px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); transition: 0.3s; }
+.step:hover { transform: translateY(-6px); box-shadow: 0 6px 16px rgba(0,0,0,0.12); }
+.step h3 { color: #0096c7; margin-bottom: 10px; font-size: 1.2rem; }
+
+/* Impact */
+.impact { background: linear-gradient(90deg, #0077b6, #023e8a); color: white; padding: 50px 20px; border-radius: 12px; margin: 40px auto; max-width: 850px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+
+/* Forms */
+form { background: #fff; padding: 25px; margin: 30px auto; max-width: 500px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+form label { display: block; margin: 10px 0 5px; font-weight: 600; }
+form input, form select, form textarea { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px; transition: border 0.2s; }
+form input:focus, form textarea:focus, form select:focus { border-color: #0077b6; outline: none; }
+
+/* Tables */
+table { width: 95%; margin: 30px auto; border-collapse: collapse; background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+table th, table td { padding: 14px; border: 1px solid #eee; text-align: center; }
+table th { background: #0077b6; color: white; font-weight: 600; }
+table tr:nth-child(even) { background: #f9f9f9; }
+table tr:hover { background: #e6f7ff; transition: 0.2s; }
+
+/* Footer */
+footer { background: #023e8a; color: white; text-align: center; padding: 20px; margin-top: 50px; font-size: 0.9rem; }
+
+/* 🌙 Dark Mode Toggle Button */
+#darkModeToggle {
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: white;
+  margin-left: 10px;
+}
+
+/* Alternative button style class (if used elsewhere) */
+.dark-toggle {
+  background: none;
+  border: none;
+  color: black;
+  font-size: 18px;
+  cursor: pointer;
+  margin-left: 15px;
+}
+.dark-toggle:hover {
+  color: #ffdd00;
+}
+
+/* 🌙 Dark Mode Theme */
+body.dark {
+  background-color: #121212;
+  color: #f1f1f1;
+}
+
+/* Header & Nav */
+body.dark header {
+  background-color: #1e1e1e;
+  color: #f1f1f1;
+}
+body.dark nav a {
+  color: #f1f1f1;
+}
+body.dark nav a.active {
+  color: #ffdd00;
+}
+
+/* Footer */
+body.dark footer {
+  background-color: #1e1e1e;
+  color: #f1f1f1;
+}
+
+/* Tables */
+body.dark table {
+  background-color: #1e1e1e;
+  color: #f1f1f1;
+  border-color: #444;
+  border-collapse: collapse;
+  width: 100%;
+}
+body.dark th, 
+body.dark td {
+  background-color: #1e1e1e;
+  color: #f1f1f1;
+  border: 1px solid #444;
+}
+body.dark tr:hover td {
+  background-color: #333;
+  color: #ffdd00;
+}
+
+/* Dashboard Charts */
+body.dark canvas {
+  background-color: #222 !important;
+}
+body.dark .chartjs-render-monitor {
+  color: #f1f1f1 !important;
+}
+body.dark .chartjs-legend text {
+  fill: #f1f1f1 !important;
+}
+
+/* Forms */
+body.dark label {
+  color: #f1f1f1;
+}
+body.dark input, 
+body.dark select, 
+body.dark textarea {
+  background-color: #2a2a2a;
+  color: #f1f1f1;
+  border: 1px solid #555;
+}
+body.dark input::placeholder, 
+body.dark textarea::placeholder {
+  color: #bbb;
+}
+
+/* Buttons */
+body.dark button,
+body.dark input[type="submit"] {
+  background-color: #0066cc;
+  color: #fff;
+  border: none;
+}
+body.dark button:hover,
+body.dark input[type="submit"]:hover {
+  background-color: #0055aa;
+}
+
+/* Section Headings */
+body.dark h1, 
+body.dark h2, 
+body.dark h3 {
+  color: #ffdd00;
+}
+
+
+
+.empty-message {
+  text-align: center;
+  font-size: 1.1rem;
+  padding: 20px;
+  color: #555;
+}
+
+.empty-message a.btn {
+  margin-left: 10px;
+}
+
+
+/* 🌙 Dark Mode Global Fixes */
+body.dark {
+  background-color: #121212 !important;
+  color: #f1f1f1 !important;
+}
+
+/* Headings, paragraphs, spans */
+body.dark h1, 
+body.dark h2, 
+body.dark h3, 
+body.dark h4, 
+body.dark h5, 
+body.dark h6, 
+body.dark p, 
+body.dark span, 
+body.dark label {
+  color: #ffdd00 !important;
+}
+
+/* Navbar dropdown */
+body.dark .dropdown, 
+body.dark .dropdown a, 
+body.dark .dropdown-content, 
+body.dark .dropdown-content a {
+  background-color: #1e1e1e !important;
+  color: #ffdd00 !important;
+}
+body.dark .dropdown-content a:hover {
+  background-color: #333 !important;
+  color: #ffdd00 !important;
+}
+
+/* Cards / Info Boxes */
+body.dark .card, 
+body.dark .info-box {
+  background-color: #1e1e1e !important;
+  color: #ffdd00 !important;
+  border: 1px solid #444 !important;
+}
+
+/* Forms */
+body.dark form input, 
+body.dark form select, 
+body.dark form textarea {
+  background-color: #2a2a2a !important;
+  color: #ffdd00 !important;
+  border: 1px solid #555 !important;
+}
+body.dark form option {
+  background-color: #2a2a2a !important;
+  color: #ffdd00 !important;
+}
+
+/* Buttons */
+body.dark button,
+body.dark .btn,
+body.dark input[type="submit"] {
+  background-color: #0077b6 !important;
+  color: #ffdd00 !important;
+}
+body.dark button:hover,
+body.dark .btn:hover,
+body.dark input[type="submit"]:hover {
+  background-color: #005f99 !important;
+  color: #ffdd00 !important;
+}
+
+/* Footer */
+body.dark footer, 
+body.dark footer p, 
+body.dark footer span {
+  background-color: #121212 !important;
+  color: #ffdd00 !important;
+}
