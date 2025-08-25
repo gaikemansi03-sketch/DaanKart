@@ -282,6 +282,7 @@ body.dark h3 {
   color: #555;
 }
 
+
 .empty-message a.btn {
   margin-left: 10px;
 }
@@ -360,4 +361,78 @@ body.dark footer p,
 body.dark footer span {
   background-color: #121212 !important;
   color: #ffdd00 !important;
+}
+
+/* ✅ QR Section */
+.qr-box {
+  text-align: center;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background: #f9f9f9;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  max-width: 350px;
+}
+
+.qr-box h2 {
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.qr-box p {
+  margin-bottom: 1rem;
+  color: #555;
+}
+
+.qr-box img {
+  margin: 1rem 0;
+  border: 3px solid #ddd;
+  border-radius: 10px;
+  transition: transform 0.2s ease-in-out;
+}
+
+.qr-box img:hover {
+  transform: scale(1.05);
+  border-color: #0077b6;
+}
+
+/* ✅ Copy Link Button */
+#copyLinkBtn {
+  background: #0077b6;
+  color: #fff;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+#copyLinkBtn:hover {
+  background: #005f99;
+}
+
+/* 🌙 Dark Mode Fix */
+body.dark .qr-box {
+  background: #1e1e1e;
+  color: #f1f1f1;
+  border: 1px solid #444;
+}
+
+body.dark .qr-box h2,
+body.dark .qr-box p {
+  color: #f1f1f1;
+}
+
+body.dark .qr-box img {
+  border-color: #444;
+}
+
+body.dark #copyLinkBtn {
+  background: #ffdd00;
+  color: #121212;
+}
+
+body.dark #copyLinkBtn:hover {
+  background: #e6c800;
 }
