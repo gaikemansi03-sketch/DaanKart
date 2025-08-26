@@ -21,8 +21,8 @@ function loadNavbar() {
         <span id="username">Hi, ${loggedInUser.name} ▼</span>
         <div id="dropdown" class="dropdown">
           ${loggedInUser.role !== "admin" ? `
-            <a href="my-donations.html">My Donations</a>
-            <a href="my-requests.html">My Requests</a>
+            <a href="my_donations.html">My Donations</a>
+            <a href="my_requests.html">My Requests</a>
           ` : ""}
           <a href="#" id="logoutBtn">Logout</a>
         </div>
@@ -344,7 +344,7 @@ function loadMyDonations() {
 // ========== DISPLAY REQUESTS ==========
 function loadMyRequests() {
   const requests = JSON.parse(localStorage.getItem("requests")) || [];
-  const tbody = document.querySelector("#my-requests tbody");
+  const tbody = document.querySelector("#-requests tbody");
   if (!tbody) return;
 
   tbody.innerHTML = "";
@@ -549,10 +549,10 @@ document.addEventListener("DOMContentLoaded", () => {
   if (document.getElementById("request-form")) {
     document.getElementById("request-form").addEventListener("submit", submitRequest);
   }
-  if (document.getElementById("my-donations")) {
+  if (document.getElementById("my_donations")) {
     loadMyDonations();
   }
-  if (document.getElementById("my-requests")) {
+  if (document.getElementById("my_requests")) {
     loadMyRequests();
   }
   if (document.getElementById("dashboard")) {
