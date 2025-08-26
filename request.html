@@ -6,49 +6,48 @@
   <title>Request Item - DaanKart</title>
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 </head>
-<body>
 
-<div id="navbar"></div>
+<!-- ✅ loadBrowseDonations() runs when page loads -->
+<body onload="loadBrowseDonations()">
 
+  <div id="navbar"></div>
 
+  <section class="section">
+    <h2><i class="fa-solid fa-hand-holding-heart"></i> Browse Donations</h2>
+    
+    <!-- Category Filter -->
+    <form id="filterForm">
+      <label for="filterCategory">Filter by Category:</label>
+      <select id="filterCategory">
+        <option value="">All</option>
+        <option value="Clothes">Clothes</option>
+        <option value="Books">Books</option>
+      </select>
+      <input type="submit" value="Search">
+    </form>
 
-<section class="section">
-  <h2><i class="fa-solid fa-hand-holding-heart"></i> Browse Donations</h2>
-  <form>
-    <label>Filter by Category:</label>
-    <select>
-      <option>All</option>
-      <option>Clothes</option>
-      <option>Books</option>
-    </select>
-    <input type="submit" value="Search">
-  </form>
+    <!-- Dynamic Table -->
+    <table id="browse_donations">
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Category</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- ✅ JS will fill donations here -->
+      </tbody>
+    </table>
+  </section>
 
-  <table>
-    <tr>
-      <th>Item</th>
-      <th>Category</th>
-      <th>Action</th>
-    </tr>
-    <tr>
-      <td>Winter Jacket</td>
-      <td>Clothes</td>
-      <td><a href="#" class="btn"><i class="fa-solid fa-hand-pointer"></i> Request</a></td>
-    </tr>
-    <tr>
-      <td>Math Book</td>
-      <td>Books</td>
-      <td><a href="#" class="btn"><i class="fa-solid fa-hand-pointer"></i> Request</a></td>
-    </tr>
-  </table>
-</section>
+  <footer>
+    <p>&copy; 2025 DaanKart | Designed for Social Impact</p>
+  </footer>
 
-<footer>
-  <p>&copy; 2025 DaanKart | Designed for Social Impact</p>
-</footer>
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>

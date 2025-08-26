@@ -221,7 +221,7 @@ function loginUser(e) {
 }
 
 
-// ========== DONATION ==========
+// ========== DONATE ==========
 function submitDonation(e) {
   e.preventDefault();
 
@@ -233,7 +233,7 @@ function submitDonation(e) {
   if (!loggedInUser) {
     Swal.fire({
       icon: "warning",
-      title: "⚠ Login Required",
+      title: "Login Required ⚠️",
       text: "You must log in to donate.",
       confirmButtonText: "Go to Login",
       confirmButtonColor: "#d33",
@@ -246,7 +246,16 @@ function submitDonation(e) {
   }
 
   let donations = JSON.parse(localStorage.getItem("donations")) || [];
-  donations.push({ itemName, category, description, status: "Pending" });
+
+  // ✅ include username to track ownership
+  donations.push({
+    username: loggedInUser.email,
+    itemName,
+    category,
+    description,
+    status: "Pending"
+  });
+
   localStorage.setItem("donations", JSON.stringify(donations));
 
   Swal.fire({
@@ -257,14 +266,19 @@ function submitDonation(e) {
     confirmButtonColor: "#3085d6",
     background: "#fefefe",
     color: "#333",
-    showClass: { popup: "animate__animated animate__fadeInDown" },
-    hideClass: { popup: "animate__animated animate__fadeOutUp" }
+    showClass: {
+      popup: "animate__animated animate__fadeInDown"
+    },
+    hideClass: {
+      popup: "animate__animated animate__fadeOutUp"
+    }
   }).then((result) => {
     if (result.isConfirmed) {
       window.location.href = "my_donations.html";
     }
   });
 }
+
 
 
 
@@ -323,41 +337,114 @@ function submitRequest(e) {
   });
 }
 
-// ========== DISPLAY DONATIONS ==========
+// ========= DISPLAY MY DONATIONS =========
+// ========== DISPLAY USER'S DONATIONS ==========
 function loadMyDonations() {
+  const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+  if (!loggedInUser) return;
+
   const donations = JSON.parse(localStorage.getItem("donations")) || [];
-  const tbody = document.querySelector("#my-donations tbody");
+  const tbody = document.querySelector("#my_donations tbody");
+  if (!tbody) return;
+
+  // ✅ filter only current user’s donations
+  const userDonations = donations.filter(d => d.username === loggedInUser.email);
+
+  tbody.innerHTML = "";
+  if (userDonations.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="3">No donations yet. <a href="donate.html">Donate Now</a></td></tr>`;
+    return;
+  }
+
+  userDonations.forEach(d => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${d.itemName}</td>
+      <td>${d.category}</td>
+      <td>${d.status}</td>
+    `;
+    tbody.appendChild(row);
+  });
+}
+
+
+// ========= DISPLAY MY REQUESTS =========
+// ========== DISPLAY USER'S REQUESTS ==========
+function loadMyRequests() {
+  const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+  if (!loggedInUser) return;
+
+  const requests = JSON.parse(localStorage.getItem("requests")) || [];
+  const tbody = document.querySelector("#my_requests tbody");
+  if (!tbody) return;
+
+  tbody.innerHTML = "";
+
+  // ✅ filter only this user's requests
+  const userRequests = requests.filter(r => r.username === loggedInUser.email);
+
+  if (userRequests.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="3">No requests yet.</td></tr>`;
+    return;
+  }
+
+  userRequests.forEach(r => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${r.itemName}</td>
+      <td>${r.category}</td>
+      <td>${r.status}</td>
+    `;
+    tbody.appendChild(row);
+  });
+}
+
+
+
+// ========= DISPLAY AVAILABLE DONATIONS (REQUEST TAB) =========
+// ========= BROWSE DONATIONS =========
+function loadBrowseDonations() {
+  const donations = JSON.parse(localStorage.getItem("donations")) || [];
+  const tbody = document.querySelector("#browse_donations tbody");
   if (!tbody) return;
 
   tbody.innerHTML = "";
   if (donations.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="3">No donations yet. <a href="donate.html">Donate Now</a></td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="3">No donations available.</td></tr>`;
     return;
   }
-  donations.forEach(d => {
+
+  donations.forEach((d, index) => {
     const row = document.createElement("tr");
-    row.innerHTML = `<td>${d.itemName}</td><td>${d.category}</td><td>${d.status}</td>`;
+    row.innerHTML = `
+      <td>${d.itemName}</td>
+      <td>${d.category}</td>
+      <td><button class="btn" onclick="handleRequest('${d.itemName}', '${d.category}')">Request</button></td>
+    `;
     tbody.appendChild(row);
   });
 }
 
-// ========== DISPLAY REQUESTS ==========
-function loadMyRequests() {
-  const requests = JSON.parse(localStorage.getItem("requests")) || [];
-  const tbody = document.querySelector("#-requests tbody");
-  if (!tbody) return;
-
-  tbody.innerHTML = "";
-  if (requests.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="3">No requests yet.</td></tr>`;
+// ========= HANDLE REQUEST =========
+function handleRequest(itemName, category) {
+  let loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+  if (!loggedInUser) {
+    Swal.fire("⚠️ Please login to request items.");
     return;
   }
-  requests.forEach(r => {
-    const row = document.createElement("tr");
-    row.innerHTML = `<td>${r.itemName}</td><td>${r.category}</td><td>${r.status}</td>`;
-    tbody.appendChild(row);
+
+  let requests = JSON.parse(localStorage.getItem("requests")) || [];
+  requests.push({
+    username: loggedInUser.email,  // ✅ store user email
+    itemName: itemName,
+    category: category,
+    status: "Pending"
   });
+  localStorage.setItem("requests", JSON.stringify(requests));
+
+  Swal.fire("✅ Request submitted!", `${itemName} has been requested.`, "success");
 }
+
 
 
 // ========== ADMIN DASHBOARD ==========
@@ -371,10 +458,10 @@ function loadDashboard() {
   requests = requests.filter(r => r.category !== "Essentials");
   localStorage.setItem("requests", JSON.stringify(requests));
 
+  const donationsTbody = document.querySelector("#dashboard_donations tbody");
+  const requestsTbody = document.querySelector("#dashboard_requests tbody");
 
-  const donationsTbody = document.querySelector("#dashboard-donations tbody");
-  const requestsTbody = document.querySelector("#dashboard-requests tbody");
-
+  // ===== Render Donations =====
   function renderDonations(filterText = "", filterCategory = "") {
     donationsTbody.innerHTML = "";
     let filtered = donations.filter(d =>
@@ -382,7 +469,7 @@ function loadDashboard() {
       (filterCategory === "" || d.category === filterCategory)
     );
     if (filtered.length === 0) {
-      donationsTbody.innerHTML = `<tr><td colspan="4">No donations found.</td></tr>`;
+      donationsTbody.innerHTML = `<tr><td colspan="5">No donations found.</td></tr>`;
     } else {
       filtered.forEach((d, index) => {
         const row = document.createElement("tr");
@@ -390,6 +477,7 @@ function loadDashboard() {
           <td>${d.itemName}</td>
           <td>${d.category}</td>
           <td>${d.status || "Pending"}</td>
+          <td>${d.user || "Anonymous"}</td>
           <td>
             ${d.status === "Delivered"
               ? "✔ Delivered"
@@ -400,6 +488,7 @@ function loadDashboard() {
     }
   }
 
+  // ===== Render Requests =====
   function renderRequests(filterText = "", filterCategory = "") {
     requestsTbody.innerHTML = "";
     let filtered = requests.filter(r =>
@@ -407,7 +496,7 @@ function loadDashboard() {
       (filterCategory === "" || r.category === filterCategory)
     );
     if (filtered.length === 0) {
-      requestsTbody.innerHTML = `<tr><td colspan="4">No requests found.</td></tr>`;
+      requestsTbody.innerHTML = `<tr><td colspan="5">No requests found.</td></tr>`;
     } else {
       filtered.forEach((r, index) => {
         const row = document.createElement("tr");
@@ -415,6 +504,7 @@ function loadDashboard() {
           <td>${r.itemName}</td>
           <td>${r.category}</td>
           <td>${r.status || "Pending"}</td>
+          <td>${r.user || "Anonymous"}</td>
           <td>
             ${r.status === "Delivered"
               ? "✔ Delivered"
@@ -425,6 +515,7 @@ function loadDashboard() {
     }
   }
 
+  // ===== Charts =====
   function renderCharts() {
     if (window.donationChartInstance) window.donationChartInstance.destroy();
     if (window.requestChartInstance) window.requestChartInstance.destroy();
@@ -509,6 +600,7 @@ function loadDashboard() {
 
   // ===== Export CSV =====
   function exportCSV(data, filename) {
+    if (!data.length) return alert("No data to export!");
     const rows = [Object.keys(data[0]).join(","), ...data.map(d => Object.values(d).join(","))];
     const csvContent = "data:text/csv;charset=utf-8," + rows.join("\n");
     const link = document.createElement("a");
@@ -529,7 +621,6 @@ function loadDashboard() {
     exportCSV(requests, "requests.csv");
   });
 }
-
 
 // ========== INITIALIZE ==========
 document.addEventListener("DOMContentLoaded", () => {
@@ -570,4 +661,11 @@ document.addEventListener("DOMContentLoaded", () => {
   if (localStorage.getItem("darkMode") === "true") {
     document.body.classList.add("dark");
   }
+});
+
+// ========== AUTO PAGE LOADER ==========
+document.addEventListener("DOMContentLoaded", () => {
+  if (document.querySelector("#my_donations")) loadMyDonations();
+  if (document.querySelector("#my_requests")) loadMyRequests();
+  if (document.querySelector("#browse_donations")) loadBrowseDonations();
 });
