@@ -127,9 +127,6 @@ function registerUser(event) {
       icon: "error",
       title: "⚠ Missing Fields",
       text: "All fields are required!",
-      confirmButtonColor: "#d33",
-      background: "#fff8f0",
-      color: "#333",
     });
     return;
   }
@@ -140,9 +137,6 @@ function registerUser(event) {
       icon: "warning",
       title: "⚠ User Exists",
       text: "An account already exists with this email.",
-      confirmButtonColor: "#f39c12",
-      background: "#fff8f0",
-      color: "#333",
     });
     return;
   }
@@ -155,16 +149,10 @@ function registerUser(event) {
     title: "🎉 Registered Successfully!",
     text: "Please login with your credentials.",
     confirmButtonText: "Go to Login",
-    confirmButtonColor: "#3085d6",
-    background: "#fefefe",
-    color: "#333",
-    showClass: { popup: "animate__animated animate__fadeInDown" },
-    hideClass: { popup: "animate__animated animate__fadeOutUp" }
   }).then(() => {
     window.location.href = "login.html";
   });
 }
-
 
 // ========== LOGIN ==========
 function loginUser(e) {
@@ -179,9 +167,6 @@ function loginUser(e) {
       icon: "success",
       title: "👑 Welcome Admin!",
       text: "Redirecting to Dashboard...",
-      confirmButtonColor: "#3085d6",
-      background: "#fefefe",
-      color: "#333",
     }).then(() => {
       window.location.href = "dashboard.html";
     });
@@ -196,9 +181,6 @@ function loginUser(e) {
       icon: "error",
       title: "🚫 Invalid Credentials",
       text: "Please check your email or password.",
-      confirmButtonColor: "#d33",
-      background: "#fff8f0",
-      color: "#333",
     });
     return;
   }
@@ -209,17 +191,10 @@ function loginUser(e) {
     icon: "success",
     title: `🎉 Welcome, ${user.name}!`,
     text: "Login successful.",
-    confirmButtonText: "Continue",
-    confirmButtonColor: "#3085d6",
-    background: "#fefefe",
-    color: "#333",
-    showClass: { popup: "animate__animated animate__fadeInDown" },
-    hideClass: { popup: "animate__animated animate__fadeOutUp" }
   }).then(() => {
     window.location.href = "index.html";
   });
 }
-
 
 // ========== DONATE ==========
 function submitDonation(e) {
@@ -231,15 +206,7 @@ function submitDonation(e) {
 
   let loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
   if (!loggedInUser) {
-    Swal.fire({
-      icon: "warning",
-      title: "Login Required ⚠️",
-      text: "You must log in to donate.",
-      confirmButtonText: "Go to Login",
-      confirmButtonColor: "#d33",
-      background: "#fff8f0",
-      color: "#333",
-    }).then(() => {
+    Swal.fire("⚠️ Login Required", "You must log in to donate.", "warning").then(() => {
       window.location.href = "login.html";
     });
     return;
@@ -247,7 +214,6 @@ function submitDonation(e) {
 
   let donations = JSON.parse(localStorage.getItem("donations")) || [];
 
-  // ✅ include username to track ownership
   donations.push({
     username: loggedInUser.email,
     itemName,
@@ -263,24 +229,12 @@ function submitDonation(e) {
     text: "Your donation has been successfully added.",
     icon: "success",
     confirmButtonText: "View My Donations",
-    confirmButtonColor: "#3085d6",
-    background: "#fefefe",
-    color: "#333",
-    showClass: {
-      popup: "animate__animated animate__fadeInDown"
-    },
-    hideClass: {
-      popup: "animate__animated animate__fadeOutUp"
-    }
   }).then((result) => {
     if (result.isConfirmed) {
       window.location.href = "my_donations.html";
     }
   });
 }
-
-
-
 
 // ========== REQUEST ==========
 function submitRequest(e) {
@@ -291,118 +245,87 @@ function submitRequest(e) {
   const location = document.getElementById("location").value.trim();
 
   if (!item || !category || !quantity || !location) {
-    Swal.fire({
-      icon: "error",
-      title: "⚠ Missing Fields",
-      text: "All fields are required!",
-      confirmButtonColor: "#d33",
-      background: "#fff8f0",
-      color: "#333",
-    });
+    Swal.fire("⚠ Missing Fields", "All fields are required!", "error");
     return;
   }
 
   let loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
   if (!loggedInUser) {
-    Swal.fire({
-      icon: "warning",
-      title: "⚠ Login Required",
-      text: "You must log in to request help.",
-      confirmButtonText: "Go to Login",
-      confirmButtonColor: "#d33",
-      background: "#fff8f0",
-      color: "#333",
-    }).then(() => {
+    Swal.fire("⚠ Login Required", "You must log in to request help.", "warning").then(() => {
       window.location.href = "login.html";
     });
     return;
   }
 
   let requests = JSON.parse(localStorage.getItem("requests")) || [];
-  requests.push({ itemName: item, category, quantity, location, status: "Pending" });
+  requests.push({
+    username: loggedInUser.email,
+    itemName: item,
+    category,
+    quantity,
+    location,
+    status: "Pending"
+  });
   localStorage.setItem("requests", JSON.stringify(requests));
 
-  Swal.fire({
-    icon: "success",
-    title: "✅ Request Submitted",
-    text: "Your request has been recorded successfully.",
-    confirmButtonText: "View My Requests",
-    confirmButtonColor: "#3085d6",
-    background: "#fefefe",
-    color: "#333",
-    showClass: { popup: "animate__animated animate__fadeInDown" },
-    hideClass: { popup: "animate__animated animate__fadeOutUp" }
-  }).then(() => {
+  Swal.fire("✅ Request Submitted", "Your request has been recorded successfully.", "success").then(() => {
     window.location.href = "my_requests.html";
   });
 }
 
-// ========= DISPLAY MY DONATIONS =========
 // ========== DISPLAY USER'S DONATIONS ==========
 function loadMyDonations() {
-  const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
-  if (!loggedInUser) return;
-
   const donations = JSON.parse(localStorage.getItem("donations")) || [];
-  const tbody = document.querySelector("#my_donations tbody");
+  const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+  const tbody = document.querySelector("#donationsTable tbody");
   if (!tbody) return;
 
-  // ✅ filter only current user’s donations
-  const userDonations = donations.filter(d => d.username === loggedInUser.email);
-
   tbody.innerHTML = "";
-  if (userDonations.length === 0) {
+  if (!loggedInUser) {
+    tbody.innerHTML = `<tr><td colspan="3">Please log in to see your donations.</td></tr>`;
+    return;
+  }
+
+  const myDonations = donations.filter(d => d.username === loggedInUser.email);
+
+  if (myDonations.length === 0) {
     tbody.innerHTML = `<tr><td colspan="3">No donations yet. <a href="donate.html">Donate Now</a></td></tr>`;
     return;
   }
 
-  userDonations.forEach(d => {
+  myDonations.forEach(d => {
     const row = document.createElement("tr");
-    row.innerHTML = `
-      <td>${d.itemName}</td>
-      <td>${d.category}</td>
-      <td>${d.status}</td>
-    `;
+    row.innerHTML = `<td>${d.itemName}</td><td>${d.category}</td><td>${d.status}</td>`;
     tbody.appendChild(row);
   });
 }
 
-
-// ========= DISPLAY MY REQUESTS =========
 // ========== DISPLAY USER'S REQUESTS ==========
 function loadMyRequests() {
   const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
   if (!loggedInUser) return;
 
   const requests = JSON.parse(localStorage.getItem("requests")) || [];
-  const tbody = document.querySelector("#my_requests tbody");
+  const tbody = document.querySelector("#requestsTable tbody");
   if (!tbody) return;
 
   tbody.innerHTML = "";
 
-  // ✅ filter only this user's requests
-  const userRequests = requests.filter(r => r.username === loggedInUser.email);
+  const myRequests = requests.filter(r => r.username === loggedInUser.email);
 
-  if (userRequests.length === 0) {
+  if (myRequests.length === 0) {
     tbody.innerHTML = `<tr><td colspan="3">No requests yet.</td></tr>`;
     return;
   }
 
-  userRequests.forEach(r => {
+  myRequests.forEach(r => {
     const row = document.createElement("tr");
-    row.innerHTML = `
-      <td>${r.itemName}</td>
-      <td>${r.category}</td>
-      <td>${r.status}</td>
-    `;
+    row.innerHTML = `<td>${r.itemName}</td><td>${r.category}</td><td>${r.status}</td>`;
     tbody.appendChild(row);
   });
 }
 
-
-
-// ========= DISPLAY AVAILABLE DONATIONS (REQUEST TAB) =========
-// ========= BROWSE DONATIONS =========
+// ========== BROWSE DONATIONS ==========
 function loadBrowseDonations() {
   const donations = JSON.parse(localStorage.getItem("donations")) || [];
   const tbody = document.querySelector("#browse_donations tbody");
@@ -414,7 +337,7 @@ function loadBrowseDonations() {
     return;
   }
 
-  donations.forEach((d, index) => {
+  donations.forEach((d) => {
     const row = document.createElement("tr");
     row.innerHTML = `
       <td>${d.itemName}</td>
@@ -425,7 +348,6 @@ function loadBrowseDonations() {
   });
 }
 
-// ========= HANDLE REQUEST =========
 function handleRequest(itemName, category) {
   let loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
   if (!loggedInUser) {
@@ -435,9 +357,9 @@ function handleRequest(itemName, category) {
 
   let requests = JSON.parse(localStorage.getItem("requests")) || [];
   requests.push({
-    username: loggedInUser.email,  // ✅ store user email
-    itemName: itemName,
-    category: category,
+    username: loggedInUser.email,
+    itemName,
+    category,
     status: "Pending"
   });
   localStorage.setItem("requests", JSON.stringify(requests));
@@ -445,23 +367,14 @@ function handleRequest(itemName, category) {
   Swal.fire("✅ Request submitted!", `${itemName} has been requested.`, "success");
 }
 
-
-
 // ========== ADMIN DASHBOARD ==========
 function loadDashboard() {
-  // ✅ Cleanup: remove all "Essentials" entries
   let donations = JSON.parse(localStorage.getItem("donations")) || [];
-  donations = donations.filter(d => d.category !== "Essentials");
-  localStorage.setItem("donations", JSON.stringify(donations));
-
   let requests = JSON.parse(localStorage.getItem("requests")) || [];
-  requests = requests.filter(r => r.category !== "Essentials");
-  localStorage.setItem("requests", JSON.stringify(requests));
 
   const donationsTbody = document.querySelector("#dashboard_donations tbody");
   const requestsTbody = document.querySelector("#dashboard_requests tbody");
 
-  // ===== Render Donations =====
   function renderDonations(filterText = "", filterCategory = "") {
     donationsTbody.innerHTML = "";
     let filtered = donations.filter(d =>
@@ -474,10 +387,10 @@ function loadDashboard() {
       filtered.forEach((d, index) => {
         const row = document.createElement("tr");
         row.innerHTML = `
+          <td>${d.username || "Unknown"}</td>
           <td>${d.itemName}</td>
           <td>${d.category}</td>
           <td>${d.status || "Pending"}</td>
-          <td>${d.user || "Anonymous"}</td>
           <td>
             ${d.status === "Delivered"
               ? "✔ Delivered"
@@ -488,7 +401,6 @@ function loadDashboard() {
     }
   }
 
-  // ===== Render Requests =====
   function renderRequests(filterText = "", filterCategory = "") {
     requestsTbody.innerHTML = "";
     let filtered = requests.filter(r =>
@@ -501,10 +413,10 @@ function loadDashboard() {
       filtered.forEach((r, index) => {
         const row = document.createElement("tr");
         row.innerHTML = `
+          <td>${r.username || "Unknown"}</td>
           <td>${r.itemName}</td>
           <td>${r.category}</td>
           <td>${r.status || "Pending"}</td>
-          <td>${r.user || "Anonymous"}</td>
           <td>
             ${r.status === "Delivered"
               ? "✔ Delivered"
@@ -515,12 +427,10 @@ function loadDashboard() {
     }
   }
 
-  // ===== Charts =====
   function renderCharts() {
     if (window.donationChartInstance) window.donationChartInstance.destroy();
     if (window.requestChartInstance) window.requestChartInstance.destroy();
 
-    // ✅ Only Clothes + Books
     const donationCategories = { Clothes: 0, Books: 0 };
     donations.forEach(d => {
       if (donationCategories[d.category] !== undefined) {
@@ -532,10 +442,7 @@ function loadDashboard() {
       type: "pie",
       data: {
         labels: Object.keys(donationCategories),
-        datasets: [{
-          data: Object.values(donationCategories),
-          backgroundColor: ["#0077b6", "#90e0ef"]
-        }]
+        datasets: [{ data: Object.values(donationCategories), backgroundColor: ["#0077b6", "#90e0ef"] }]
       }
     });
 
@@ -550,11 +457,7 @@ function loadDashboard() {
       type: "bar",
       data: {
         labels: Object.keys(requestCategories),
-        datasets: [{
-          label: "Requests Count",
-          data: Object.values(requestCategories),
-          backgroundColor: ["#0077b6", "#90e0ef"]
-        }]
+        datasets: [{ label: "Requests Count", data: Object.values(requestCategories), backgroundColor: ["#0077b6", "#90e0ef"] }]
       },
       options: { responsive: true, plugins: { legend: { display: false } } }
     });
@@ -600,7 +503,6 @@ function loadDashboard() {
 
   // ===== Export CSV =====
   function exportCSV(data, filename) {
-    if (!data.length) return alert("No data to export!");
     const rows = [Object.keys(data[0]).join(","), ...data.map(d => Object.values(d).join(","))];
     const csvContent = "data:text/csv;charset=utf-8," + rows.join("\n");
     const link = document.createElement("a");
@@ -612,13 +514,13 @@ function loadDashboard() {
   }
 
   document.getElementById("exportDonations").addEventListener("click", () => {
-    if (donations.length === 0) return alert("No donations to export!");
-    exportCSV(donations, "donations.csv");
+    if (donations.length > 0) exportCSV(donations, "donations.csv");
+    else Swal.fire("⚠ No Donations", "No donations to export.", "info");
   });
 
   document.getElementById("exportRequests").addEventListener("click", () => {
-    if (requests.length === 0) return alert("No requests to export!");
-    exportCSV(requests, "requests.csv");
+    if (requests.length > 0) exportCSV(requests, "requests.csv");
+    else Swal.fire("⚠ No Requests", "No requests to export.", "info");
   });
 }
 
@@ -627,7 +529,6 @@ document.addEventListener("DOMContentLoaded", () => {
   loadNavbar();
   setupAuthLinks();
 
-  // Page-specific logic
   if (document.getElementById("register-form")) {
     document.getElementById("register-form").addEventListener("submit", registerUser);
   }
@@ -640,17 +541,12 @@ document.addEventListener("DOMContentLoaded", () => {
   if (document.getElementById("request-form")) {
     document.getElementById("request-form").addEventListener("submit", submitRequest);
   }
-  if (document.getElementById("my_donations")) {
-    loadMyDonations();
-  }
-  if (document.getElementById("my_requests")) {
-    loadMyRequests();
-  }
-  if (document.getElementById("dashboard")) {
-    loadDashboard();
-  }
 
-  // Dark Mode Toggle
+  if (document.getElementById("donationsTable")) loadMyDonations();
+  if (document.getElementById("requestsTable")) loadMyRequests();
+  if (document.getElementById("browse_donations")) loadBrowseDonations();
+  if (document.getElementById("dashboard")) loadDashboard();
+
   const darkToggle = document.getElementById("darkModeToggle");
   if (darkToggle) {
     darkToggle.addEventListener("click", () => {
@@ -661,11 +557,4 @@ document.addEventListener("DOMContentLoaded", () => {
   if (localStorage.getItem("darkMode") === "true") {
     document.body.classList.add("dark");
   }
-});
-
-// ========== AUTO PAGE LOADER ==========
-document.addEventListener("DOMContentLoaded", () => {
-  if (document.querySelector("#my_donations")) loadMyDonations();
-  if (document.querySelector("#my_requests")) loadMyRequests();
-  if (document.querySelector("#browse_donations")) loadBrowseDonations();
 });
